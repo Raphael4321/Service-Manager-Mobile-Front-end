@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default class ServiceModule {
   async createService(data) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -26,7 +28,7 @@ export default class ServiceModule {
   }
 
   async getAllService() {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -51,7 +53,7 @@ export default class ServiceModule {
   }
 
   async updateService(idServico, servicoDTO) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
