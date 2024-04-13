@@ -10,7 +10,7 @@ export default function Card({ navigation }) {
       <View style={styles.containerLeft}>
         <View style={styles.containerDesc}>
           <Text style={styles.title}>Titulo serviço</Text>
-          <Text styles={styles.desc}>Breve descrição deste serviço .....</Text>
+          <Text styles={styles.desc}>Breve descrição deste serviço</Text>
         </View>
         <TouchableOpacity
           style={styles.buton}

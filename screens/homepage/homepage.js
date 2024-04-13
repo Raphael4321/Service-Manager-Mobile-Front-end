@@ -3,17 +3,28 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
 import { TextInput } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import Card from "../../components/card/card";
 
 export default function Home({ navigation }) {
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+
+    (async () => {
+      const gettingDataService = await servicoService();
+      
+    })();
+    
+
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerHeader}>
-        {/* left */}
+
         <View style={styles.containerLeftHeader}>
           <Text style={styles.mainTitleHeader}>Olá, Seja bem vindo(a)!</Text>
           <View style={styles.inputHeaderContainer}>
@@ -26,7 +37,7 @@ export default function Home({ navigation }) {
             <FontAwesome name="filter" size={24} color="#6A7175" />
           </View>
         </View>
-        {/* right */}
+
         <View style={styles.containerRightHeader}>
           <AntDesign name="questioncircleo" size={24} color="black" />
         </View>
