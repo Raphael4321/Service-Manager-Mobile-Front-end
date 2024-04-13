@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default class ServiceModule {
   async createService(data) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -16,7 +18,7 @@ export default class ServiceModule {
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`http://localhost:3002/servicos`, options);
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/servicos`, options);
 
     if (response.ok) {
       return await response.json();
@@ -26,9 +28,11 @@ export default class ServiceModule {
   }
 
   async getAllService() {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
+
+    console.log(token);
 
     const header = new Headers({
       "Content-Type": "application/json",
@@ -41,7 +45,7 @@ export default class ServiceModule {
       mode: "cors",
     };
 
-    const response = await fetch(`http://localhost:3002/servicos`, options);
+    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/servicos`, options);
 
     if (response.ok) {
       return await response.json();
@@ -51,7 +55,7 @@ export default class ServiceModule {
   }
 
   async updateService(idServico, servicoDTO) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -68,7 +72,7 @@ export default class ServiceModule {
     };
 
     const response = await fetch(
-      `http://localhost:3002/servicos/${idServico}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/servicos/${idServico}`,
       options
     );
 
