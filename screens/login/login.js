@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
@@ -7,7 +7,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
-  w;
   const [senha, setSenha] = useState("");
 
   const submit = useCallback(async () => {
@@ -16,13 +15,13 @@ export default function Login({ navigation }) {
       senha: senha,
     };
 
-    const login = AuthService.Login(loginInfo);
+    const login = await AuthService.Login(loginInfo);
 
     if (login && login.token) {
       try {
         AsyncStorage.setItem("token", login.token);
-      } catch {
-        alert("falha ao inserir no async storage");
+      } catch (e) {
+        alert("falha para inserir no async storage");
       }
       navigation.navigate("home");
     } else {
@@ -50,7 +49,7 @@ export default function Login({ navigation }) {
           <TextInput
             value={senha}
             onChangeText={setSenha}
-            placeholder="Senha"
+            placeholder="Senha...."
             style={styles.input}
             secureTextEntry={true}
           />

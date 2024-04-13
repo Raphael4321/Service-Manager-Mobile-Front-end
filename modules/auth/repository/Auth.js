@@ -1,5 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 export default class Auth {
   static async Login(LoginDTO) {
 
@@ -20,9 +18,7 @@ export default class Auth {
     );
 
     if (response.ok) {
-      const json = await response.json();
-      await AsyncStorage.setItem('token', json.token);
-      return json;
+      return await response.json();
     } else {
       return undefined;
     }
