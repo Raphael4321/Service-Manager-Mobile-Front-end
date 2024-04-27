@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
     width: "20%",
     alignItems: "center",
     padding: 18,
+    paddingTop: 25,
   },
   horizontalLine: {
     marginTop: -23,
@@ -56,7 +57,9 @@ export const styles = StyleSheet.create({
   },
   containerCard: {
     marginTop: 35,
-    width: "100%",
+    width: 350,
     alignItems: "center",
+    paddingBottom: 70,
+    flexGrow: 1,
   },
 });
