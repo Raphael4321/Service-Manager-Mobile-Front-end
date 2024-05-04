@@ -7,6 +7,9 @@ export default class ServicoModuleService {
   async getAllService() {
     return serviceModuleRepo.getAllService();
   }
+  async getServiceById(serviceId){
+    return serviceModuleRepo.getServiceById(serviceId);
+  }
   async updateServico(id, servicoDTO) {
     return serviceModuleRepo.updateService(id, servicoDTO);
   }

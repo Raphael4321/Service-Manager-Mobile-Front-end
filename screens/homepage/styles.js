@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   containerLeftHeader: {
     height: "100%",
-    width: "80%",
+    width: "85%",
     justifyContent: "center",
     alignItems: "flex-end",
   },
@@ -44,10 +44,11 @@ export const styles = StyleSheet.create({
   },
   containerRightHeader: {
     height: "100%",
-    width: "20%",
-    alignItems: "center",
+    width: "15%",
+    alignItems: 'flex-start',
     padding: 18,
     paddingTop: 25,
+    paddingRight: 10
   },
   horizontalLine: {
     marginTop: -23,

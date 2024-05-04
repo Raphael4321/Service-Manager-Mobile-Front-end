@@ -18,7 +18,10 @@ export default class ServiceModule {
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/servicos`, options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/servicos`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();
@@ -32,7 +35,33 @@ export default class ServiceModule {
 
     if (!token) return;
 
-    console.log(token);
+    const header = new Headers({
+      "Content-Type": "application/json",
+      authorization: token,
+    });
+
+    const options = {
+      method: "GET",
+      headers: header,
+      mode: "cors",
+    };
+
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/servicos`,
+      options
+    );
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      return undefined;
+    }
+  }
+
+  async getServiceById(serviceId) {
+    const token = await AsyncStorage.getItem("token");
+
+    if (!token) return;
 
     const header = new Headers({
       "Content-Type": "application/json",
@@ -45,7 +74,10 @@ export default class ServiceModule {
       mode: "cors",
     };
 
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/servicos`, options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/servicos/${serviceId}`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();

@@ -4,6 +4,7 @@ export const styles = StyleSheet.create({
   mainContainer: {
     height: 120,
     width: "80%",
+    paddingVertical: 12,
   },
   containerLeft: {
     borderRadius: 16,

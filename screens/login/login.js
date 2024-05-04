@@ -54,6 +54,7 @@ export default function Login({ navigation }) {
             onChangeText={setEmail}
             placeholder="work@mail.com"
             style={styles.input}
+            autoCapitalize="none"
           />
         </View>
         <View style={styles.textInputWrapper}>
@@ -64,6 +65,7 @@ export default function Login({ navigation }) {
             placeholder="Senha...."
             style={styles.input}
             secureTextEntry={true}
+            autoCapitalize="none"
           />
         </View>
         <View>

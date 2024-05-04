@@ -80,4 +80,19 @@ export const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
   },
+  inputDesc: {
+    borderWidth: 1,
+    width: 200,
+    height: 130,
+  },
+  containerCircle: {
+    marginTop: 30,
+    width: "100%",
+    alignItems: "center",
+  },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 999,
+  },
 });
