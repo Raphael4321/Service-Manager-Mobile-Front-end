@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
@@ -6,21 +6,19 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  Animated,
-  DevSettings,
   ScrollView,
   RefreshControl,
 } from "react-native";
 import { servicoService } from "../../modules/service_module/service";
-import HeaderService from "../../components/headerService/headerService";
+import HeaderService from "../../components/header_service/headerService";
 import { styles } from "./styles";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../components/button/button";
 import Animation from "./animation";
+import { Platform } from "react-native";
 
 export default function Service({ route, navigation }) {
-  // id chosen service
   const { serviceId } = route.params;
   const [currService, setCurrService] = useState();
   const [isUpdatingObs, setIsUpdatingObs] = useState(false);
@@ -35,7 +33,7 @@ export default function Service({ route, navigation }) {
         setCurrService(serviceResp);
       }
     }
-  }, []);
+  }, [serviceId]);
 
   useEffect(() => {
     gettingServiceById();
@@ -50,49 +48,24 @@ export default function Service({ route, navigation }) {
     gettingServiceById().then(() => {
       setRefreshing(false);
     });
-  }, []);
-
-  const initAtendimento = async () => {
-    const servicoDTO = {
-      ...currService,
-      status: 1,
-    };
-
-    const updatedService = await servicoService.updateServico(
-      servicoDTO._id,
-      servicoDTO
-    );
-
-    if (updatedService) {
-      const updatingState = {
-        ...currService,
-        status: updatedService.status,
-      };
-      setCurrService(updatingState);
-      alert("Atendimento iniciado!!");
-    }
-  };
+  }, [gettingServiceById]);
 
   useEffect(() => {
-    switch (currService?.status) {
-      case 0: //agendado
-        //Baby Blue
-        setColorCorrect("#89CFF0");
-        break;
-      case 1: //em atendimento
-        // green
-        setColorCorrect("#5F8575");
-        break;
-      case 2: //finalizado
-        // green
-        setColorCorrect("#5F8575");
-        break;
-      case 3: //cancelado
-        // vermelho
-        setColorCorrect("#FF5733");
-        break;
-      default:
-        setColorCorrect("#89CFF0");
+    if (currService?.status !== undefined) {
+      switch (currService.status) {
+        case 0: // agendado
+          setColorCorrect("#89CFF0"); // Baby Blue
+          break;
+        case 1: // em atendimento
+        case 2: // finalizado
+          setColorCorrect("#5F8575"); // green
+          break;
+        case 3: // cancelado
+          setColorCorrect("#FF5733"); // vermelho
+          break;
+        default:
+          setColorCorrect("#89CFF0");
+      }
     }
   }, [currService?.status]);
 
@@ -114,13 +87,12 @@ export default function Service({ route, navigation }) {
       };
 
       setCurrService(auxAtt);
-      alert("salvo com sucesso!!");
+      alert("Salvo com sucesso!");
     }
   };
 
   const updatingObservacao = () => {
     if (isUpdatingObs) {
-      // update
       savingUpdateDesc();
       setIsUpdatingObs(false);
     } else {
@@ -128,27 +100,54 @@ export default function Service({ route, navigation }) {
     }
   };
 
-  const finalizarAtendimento = () => {
+  const finalizarAtendimento = async () => {
     const serviceDTO = {
       ...currService,
-      status: 2,
+      status: 2, // finalizado
     };
 
-    // padding id, dto
-    const response = servicoService.updateServico(serviceDTO._id, serviceDTO);
+    const response = await servicoService.updateServico(
+      serviceDTO._id,
+      serviceDTO
+    );
 
     if (response) {
-      alert("finalizado com sucesso!");
-      setCurrService(serviceDTO);
+      const newOne = {
+        ...currService,
+        status: response.status,
+      };
+      setCurrService(newOne);
+      alert("Atendimento finalizado com sucesso!");
     } else {
-      alert("impossível finalizar atendimento!");
+      alert("Impossível finalizar o atendimento!");
+    }
+  };
+
+  const initAtendimento = async () => {
+    const servicoDTO = {
+      ...currService,
+      status: 1, // em atendimento
+    };
+
+    const updatedService = await servicoService.updateServico(
+      servicoDTO._id,
+      servicoDTO
+    );
+
+    if (updatedService) {
+      const updatingState = {
+        ...currService,
+        status: updatedService.status,
+      };
+      setCurrService(updatingState);
+      alert("Atendimento iniciado com sucesso!");
     }
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
-        style={{ flex: 1 }}
+        contentContainerStyle={Platform.OS === "android" ? { flexGrow: 1 } : {}}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -156,32 +155,22 @@ export default function Service({ route, navigation }) {
         <HeaderService title={currService?.nome ?? ""} />
         <View style={styles.clienteNameFotoContainer}>
           <Image
-            source={require("../../assets/defaultClienteIcon.jpg")}
+            source={require("../../assets/defaultClientIcon.png")}
             style={styles.iconCliente}
           />
-          <View>
-            <Text>
-              Agendado para{" "}
-              <Text style={styles.nameCliente}>
-                {currService?.cliente?.nome ?? ""}
-              </Text>
+          <Text>
+            Agendado para{" "}
+            <Text style={styles.nameCliente}>
+              {currService?.cliente?.nome ?? ""}
             </Text>
-          </View>
+          </Text>
         </View>
         <View style={styles.containerServiceDesc}>
           <View style={styles.containerDesc}>
-            <View
-              style={{
-                alignItems: "flex-end",
-                width: "100%",
-                paddingRight: 10,
-              }}
-            >
+            <View style={styles.editButtonContainer}>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => {
-                  updatingObservacao();
-                }}
+                onPress={updatingObservacao}
               >
                 <AntDesign name="edit" size={24} color="black" />
               </TouchableOpacity>
@@ -190,7 +179,7 @@ export default function Service({ route, navigation }) {
               <TextInput
                 value={newObs}
                 onChangeText={setNewObs}
-                placeholder="value"
+                placeholder="Digite aqui"
                 style={styles.inputDesc}
                 multiline={true}
               />
@@ -199,15 +188,14 @@ export default function Service({ route, navigation }) {
             )}
           </View>
           <View style={styles.containerObs}>
-            {/* containerInfo */}
             <View style={styles.containerLeft}>
               <View style={styles.containerDescBtn}>
                 <Text style={styles.title}>Observações</Text>
               </View>
               <TouchableOpacity
-                style={styles.buton}
+                style={styles.button}
                 activeOpacity={0.8}
-                onPress={(ev) =>
+                onPress={() =>
                   navigation.navigate("ServiceDetails", {
                     currService: currService,
                   })
@@ -221,40 +209,33 @@ export default function Service({ route, navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-          <View>
-            {currService?.status == 1 ? (
-              <>
-                <Button
-                  width={200}
-                  height={40}
-                  bgColor={"#081225"}
-                  color={"white"}
-                  action={finalizarAtendimento}
-                  label={"Finalizar atendimento"}
-                />
-              </>
-            ) : (
-              <>
-                <Button
-                  width={200}
-                  height={40}
-                  bgColor={"#081225"}
-                  color={"white"}
-                  action={initAtendimento}
-                  label={"Iniciar Atendimento"}
-                />
-              </>
-            )}
-          </View>
           <View style={styles.containerCircle}>
             <Animation statusCode={currService?.status}>
               <View
-                style={{
-                  ...styles.circle,
-                  backgroundColor: colorCorrect,
-                }}
+                style={[styles.circle, { backgroundColor: colorCorrect }]}
               />
             </Animation>
+          </View>
+          <View>
+            {currService?.status === 1 ? (
+              <Button
+                width={200}
+                height={40}
+                bgColor={"#081225"}
+                color={"white"}
+                action={finalizarAtendimento}
+                label={"Finalizar atendimento"}
+              />
+            ) : (
+              <Button
+                width={200}
+                height={40}
+                bgColor={"#081225"}
+                color={"white"}
+                action={initAtendimento}
+                label={"Iniciar Atendimento"}
+              />
+            )}
           </View>
         </View>
       </ScrollView>

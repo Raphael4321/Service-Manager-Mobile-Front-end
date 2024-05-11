@@ -3,9 +3,9 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   mainContainer: {
     marginVertical: 10,
-    width: "80%",
+    width: "100%",
     padding: 10,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#E5E5E5",
     borderRadius: 16,
     shadowColor: "#000",
     shadowOffset: {
@@ -26,17 +26,16 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 5,
     color: "#081225",
   },
   desc: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#6A7175",
   },
   button: {
-    backgroundColor: "#081225",
     borderRadius: 50,
     padding: 10,
     justifyContent: "center",

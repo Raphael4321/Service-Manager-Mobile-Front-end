@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import HeaderService from "../../components/headerService/headerService";
+import HeaderService from "../../components/header_service/headerService";
 import { styles } from "./styles";
 import { View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";

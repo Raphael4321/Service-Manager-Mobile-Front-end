@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default class ClienteRepo {
   async findClienteById(userId) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -16,7 +18,7 @@ export default class ClienteRepo {
     };
 
     const response = await fetch(
-      `http://localhost:3002/cliente/${userId}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/cliente/${userId}`,
       options
     );
 
@@ -28,7 +30,7 @@ export default class ClienteRepo {
   }
 
   async findAll() {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -43,7 +45,10 @@ export default class ClienteRepo {
       mode: "cors",
     };
 
-    const response = await fetch("http://localhost:3002/cliente", options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/cliente`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();
@@ -53,7 +58,7 @@ export default class ClienteRepo {
   }
 
   async createClient(clienteDTO) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -69,7 +74,10 @@ export default class ClienteRepo {
       body: JSON.stringify(clienteDTO),
     };
 
-    const response = await fetch("http://localhost:3002/cliente", options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/cliente`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();
@@ -79,7 +87,7 @@ export default class ClienteRepo {
   }
 
   async updateClient(clienteDTO, idCliente) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -96,7 +104,7 @@ export default class ClienteRepo {
     };
 
     const response = await fetch(
-      `http://localhost:3002/cliente/${idCliente}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/cliente/${idCliente}`,
       options
     );
 

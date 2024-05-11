@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 export default class UserRepo {
   async findUserById(userId) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -16,7 +18,7 @@ export default class UserRepo {
     };
 
     const response = await fetch(
-      `http://localhost:3002/funcionario/${userId}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/funcionario/${userId}`,
       options
     );
 
@@ -28,7 +30,7 @@ export default class UserRepo {
   }
 
   async findAll() {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -43,7 +45,10 @@ export default class UserRepo {
       mode: "cors",
     };
 
-    const response = await fetch("http://localhost:3002/funcionario", options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/funcionario`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();
@@ -53,7 +58,7 @@ export default class UserRepo {
   }
 
   async createUser(userDTO) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -68,7 +73,10 @@ export default class UserRepo {
       mode: "cors",
     };
 
-    const response = await fetch("http://localhost:3002/funcionario", options);
+    const response = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL}/funcionario`,
+      options
+    );
 
     if (response.ok) {
       return await response.json();
@@ -78,7 +86,7 @@ export default class UserRepo {
   }
 
   async updateUser(id, userDTO) {
-    const token = sessionStorage.getItem("token");
+    const token = await AsyncStorage.getItem("token");
 
     if (!token) return;
 
@@ -95,7 +103,7 @@ export default class UserRepo {
     };
 
     const response = await fetch(
-      `http://localhost:3002/funcionario/${id}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/funcionario/${id}`,
       options
     );
 

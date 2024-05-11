@@ -47,7 +47,7 @@ export default class ServiceModule {
     };
 
     const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}/servicos`,
+      `${process.env.EXPO_PUBLIC_API_URL}/servico`,
       options
     );
 
@@ -75,7 +75,7 @@ export default class ServiceModule {
     };
 
     const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}/servicos/${serviceId}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/servico/${serviceId}`,
       options
     );
 
@@ -104,7 +104,7 @@ export default class ServiceModule {
     };
 
     const response = await fetch(
-      `${process.env.EXPO_PUBLIC_API_URL}/servicos/${idServico}`,
+      `${process.env.EXPO_PUBLIC_API_URL}/servico/${idServico}`,
       options
     );
 

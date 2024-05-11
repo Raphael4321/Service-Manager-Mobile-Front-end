@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
 import { AuthService } from "../../modules/auth/service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [isPressed, setIsPressed] = useState(false);
+  const isFocused = useIsFocused();
 
   const submit = useCallback(async () => {
     const loginInfo = {
@@ -15,31 +18,36 @@ export default function Login({ navigation }) {
       senha: senha,
     };
 
-    const login = await AuthService.Login(loginInfo);
+    try {
+      const login = await AuthService.Login(loginInfo);
 
-    if (login && login.token) {
-      try {
-        AsyncStorage.setItem("token", login.token);
-      } catch (e) {
-        alert("falha para inserir no async storage");
+      if (login && login.token) {
+        try {
+          await AsyncStorage.setItem("token", login.token);
+          navigation.navigate("menu");
+        } catch (e) {
+          console.error(e);
+          Alert.alert("Erro", "Falha ao inserir no async storage");
+        }
+      } else {
+        Alert.alert("Erro", login.error || "Senha ou email incorreto");
       }
-      navigation.navigate("home");
-    } else {
-      alert("Senha ou email incorreto");
+    } catch (e) {
+      console.error(e);
+      Alert.alert("Erro", e.message || "Ocorreu um erro durante o login");
     }
   }, [email, senha]);
 
-  // verify token in Local storage and send to home
   const verifyToken = async () => {
     const myToken = await AsyncStorage.getItem("token");
     if (myToken) {
-      navigation.navigate("home");
+      navigation.navigate("menu");
     }
   };
 
   useEffect(() => {
     verifyToken();
-  }, []);
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -48,21 +56,19 @@ export default function Login({ navigation }) {
       </View>
       <View style={styles.formWrapper}>
         <View style={styles.textInputWrapper}>
-          <Text>Email</Text>
           <TextInput
             value={email}
             onChangeText={setEmail}
-            placeholder="work@mail.com"
+            placeholder="Email"
             style={styles.input}
             autoCapitalize="none"
           />
         </View>
         <View style={styles.textInputWrapper}>
-          <Text>Senha</Text>
           <TextInput
             value={senha}
             onChangeText={setSenha}
-            placeholder="Senha...."
+            placeholder="Senha"
             style={styles.input}
             secureTextEntry={true}
             autoCapitalize="none"
@@ -70,11 +76,13 @@ export default function Login({ navigation }) {
         </View>
         <View>
           <TouchableOpacity
-            style={styles.button}
-            activeOpacity={0.8}
+            style={[styles.button, isPressed && styles.buttonActive]}
+            activeOpacity={0.5}
+            onPressIn={() => setIsPressed(true)}
+            onPressOut={() => setIsPressed(false)}
             onPress={(ev) => submit()}
           >
-            <Text>Entrar</Text>
+            <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
         </View>
       </View>

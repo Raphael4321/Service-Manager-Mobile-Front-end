@@ -1,20 +1,12 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  KeyboardAvoidingView,
-} from "react-native";
-import { StatusBar } from "expo-status-bar";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, View, ScrollView, KeyboardAvoidingView } from "react-native";
 import { styles } from "./styles";
 import { TextInput } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import Card from "../../components/card/card";
+import Choice from "../../components/choice/choice";
 import { servicoService } from "../../modules/service_module/service";
-import { Platform } from "react-native";
 
 export default function Home({ navigation }) {
   const [search, setSearch] = useState("");
@@ -22,7 +14,7 @@ export default function Home({ navigation }) {
 
   const gettingData = async () => {
     const gettingDataService = await servicoService.getAllService();
-    setData(gettingDataService);
+    setData(gettingDataService || []);
   };
 
   useEffect(() => {
@@ -64,7 +56,7 @@ export default function Home({ navigation }) {
         </View>
         {/* right */}
         <View style={styles.containerRightHeader}>
-          <AntDesign name="questioncircleo" size={24} color="black" />
+          <MaterialIcons name="questioncircleo" size={24} color="black" />
         </View>
       </View>
       <View style={styles.horizontalLine} />
@@ -72,6 +64,13 @@ export default function Home({ navigation }) {
         contentContainerStyle={styles.containerCard}
         showsVerticalScrollIndicator={false}
       >
+        <Choice
+          navigation={navigation}
+          label={"Últimos serviços"}
+          description={"Informações de serviços"}
+          target={"home"}
+        />
+
         {data
           .filter((item) => filtering(item))
           .map((item, index) => (

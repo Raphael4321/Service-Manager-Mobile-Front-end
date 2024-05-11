@@ -6,7 +6,7 @@ const Animation = ({ children, styles, statusCode }) => {
 
   // animation logic
   useEffect(() => {
-    if (statusCode && statusCode !== 2) {
+    if (statusCode && statusCode != 2) {
       Animated.loop(
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -14,6 +14,14 @@ const Animation = ({ children, styles, statusCode }) => {
           useNativeDriver: true,
         })
       ).start();
+    } else {
+      Animated.loop(
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        })
+      ).stop();
     }
   }, [fadeAnim, statusCode]);
 

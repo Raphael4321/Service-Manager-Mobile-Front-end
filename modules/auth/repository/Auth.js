@@ -1,6 +1,5 @@
 export default class Auth {
   static async Login(LoginDTO) {
-
     const header = new Headers({
       "Content-Type": "application/json",
     });
@@ -18,9 +17,10 @@ export default class Auth {
     );
 
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      return { email: LoginDTO.email, token: data.token };
     } else {
-      return undefined;
+      throw new Error(`Request failed with status ${response.status}`);
     }
   }
 }
